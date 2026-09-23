@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="AgriGrow — farm-direct marketplace connecting farmers and consumers with QR payments and tamper-proof traceability." />
+  <title>AgriGrow · Farm-direct marketplace</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:wght@600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js" defer></script>
+</head>
+<body>
+  <div id="app"></div>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>© <span id="yr"></span> AgriGrow · Farm-direct marketplace</div>
+      <div class="muted">Built for fairer food chains.</div>
+    </div>
+  </footer>
+  <script src="store.js" defer></script>
+  <script src="app.js" defer></script>
+  <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
