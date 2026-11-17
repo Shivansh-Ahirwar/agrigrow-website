@@ -67,7 +67,7 @@ function withShell(html, activeTab){
             <div class="avatar">${esc(u.name.trim()[0]||'A')}</div>
             <button class="btn ghost" style="padding:9px 14px;font-size:13px" onclick="signOut()">${icon('logout')}<span>Sign out</span></button>
           </div>
-        ` : `<a class="btn" href="#/login">Sign in${icon('arrow')}</a>`}
+        ` : `<a class="btn sign-in-cta" href="#/login">Sign in</a>`}
       </div>
     </header>
     <main class="shell">${html}</main>
@@ -77,108 +77,59 @@ function signOut(){ Store.logout(); render(); }
 
 // ---------- views ----------
 function viewLanding(){
-  return withShell(`
-    <section class="hero">
-      <div>
-        <h1>Farm-direct.<br/>Fairer prices.</h1>
-        <p>Buy fresh produce straight from farmers. Pay with QR. Trace every kilogram from harvest to your kitchen — with photos of the actual produce before you buy.</p>
-        <div class="cta-row">
-          <a class="btn" style="background:#fff;color:var(--primary)" href="#/login">Get started${icon('arrow')}</a>
-          <a class="btn ghost" style="background:rgba(255,255,255,.18);color:#fff" href="#/consumer">Browse market</a>
-        </div>
-      </div>
-      <div class="hero-art">
-        <div class="blob"></div>
-        ${I.sprout}
-      </div>
-    </section>
-
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="icon-wrap">${I.tractor}</div>
-        <h3>For Farmers</h3>
-        <div class="muted">List your produce with photos, set fair prices, manage orders end-to-end.</div>
-      </div>
-      <div class="feature-card">
-        <div class="icon-wrap">${I.cart}</div>
-        <h3>For Consumers</h3>
-        <div class="muted">Shop fresh, pay via UPI / QR, and trace your food back to its farm.</div>
-      </div>
-      <div class="feature-card">
-        <div class="icon-wrap">${I.shield}</div>
-        <h3>Tamper-proof Trace</h3>
-        <div class="muted">Only the farmer can update an order's stage — keeps the chain trustworthy.</div>
-      </div>
-    </div>
-
-    <div class="benefit-list">
-      <h3>Why AgriGrow?</h3>
-      <ul>
-        <li>${I.check}<span>No middlemen — farmers earn more, you pay less.</span></li>
-        <li>${I.check}<span>UPI / QR payments built right into checkout.</span></li>
-        <li>${I.check}<span>Tamper-proof traceability — only the farmer can advance status.</span></li>
-        <li>${I.check}<span>Photos of the actual produce before you commit to buy.</span></li>
-      </ul>
-    </div>
-  `, null);
+  return `
+    <main class="field-home">
+      <section class="field-card">
+        <header class="field-header">
+          <a class="field-brand" href="#/" aria-label="AgriGrow home">AgriGrow<span class="field-brand-leaf">✦</span></a>
+          <a class="field-signup" href="#/login">Sign up</a>
+        </header>
+        <section class="field-hero">
+          <div class="field-copy">
+            <h1>Good Food.<br/>From Farm to<br/>Your Door.</h1>
+            <p>Shop fresh produce straight from local farmers. Pay simply<br class="desktop-break"/> with QR and follow every order from harvest to home.</p>
+            <div class="field-actions"><a class="field-button primary" href="#/consumer">Explore Produce</a><a class="field-button" href="#/trace">How It Works</a></div>
+          </div>
+          <div class="field-gallery" aria-label="Fresh organic produce and farm">
+            <div class="field-produce-ground" aria-hidden="true"></div>
+            <img class="field-produce" src="https://adst.mp.pl/img/articles/zdrowe_diety/healthy-food-1323802-1279x828.jpg" alt="Fresh red tomatoes, yellow bell pepper, and parsley" />
+          </div>
+          <div class="field-wave" aria-hidden="true"><svg viewBox="0 0 920 80" preserveAspectRatio="none"><path d="M0 13 Q25 0 50 13T100 13T150 13T200 13T250 13T300 13T350 13T400 13T450 13T500 13T550 13T600 13T650 13T700 13T750 13T800 13T850 13T900 13T950 13"/><path d="M0 24 Q25 11 50 24T100 24T150 24T200 24T250 24T300 24T350 24T400 24T450 24T500 24T550 24T600 24T650 24T700 24T750 24T800 24T850 24T900 24T950 24"/><path d="M0 35 Q25 22 50 35T100 35T150 35T200 35T250 35T300 35T350 35T400 35T450 35T500 35T550 35T600 35T650 35T700 35T750 35T800 35T850 35T900 35T950 35"/><path d="M0 46 Q25 33 50 46T100 46T150 46T200 46T250 46T300 46T350 46T400 46T450 46T500 46T550 46T600 46T650 46T700 46T750 46T800 46T850 46T900 46T950 46"/><path d="M0 57 Q25 44 50 57T100 57T150 57T200 57T250 57T300 57T350 57T400 57T450 57T500 57T550 57T600 57T650 57T700 57T750 57T800 57T850 57T900 57T950 57"/><path d="M0 68 Q25 55 50 68T100 68T150 68T200 68T250 68T300 68T350 68T400 68T450 68T500 68T550 68T600 68T650 68T700 68T750 68T800 68T850 68T900 68T950 68"/></svg></div>
+        </section>
+      </section>
+    </main>`;
 }
 
 function viewLogin(){
   return withShell(`
     <div class="login-wrap">
-      <h1 class="h1 serif">Welcome to AgriGrow</h1>
-      <p class="muted" style="margin-top:6px">Choose how you want to sign up.</p>
-      <div id="roleChoice" style="margin-top:22px;display:grid;gap:14px">
-        <div class="role-card" data-role="farmer">
-          <div class="role-icon">${I.tractor}</div>
-          <div><div style="font-weight:800;font-size:16px">Sign up as Farmer</div><div class="muted">List produce & manage orders</div></div>
-        </div>
-        <div class="role-card" data-role="consumer">
-          <div class="role-icon">${I.cart}</div>
-          <div><div style="font-weight:800;font-size:16px">Sign up as Consumer</div><div class="muted">Buy farm-direct produce</div></div>
-        </div>
-      </div>
-      <form id="loginForm" class="hidden" style="margin-top:22px;display:grid;gap:12px">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-          <button type="button" id="backRole" class="btn ghost" style="padding:8px 12px;font-size:12px">${icon('arrowLeft')}<span>Back</span></button>
-          <div id="roleBadge" class="chip"></div>
-        </div>
-        <div><label class="label">Full name</label><input class="input" name="name" required placeholder="e.g. Ramesh Patel" /></div>
-        <div><label class="label">Phone</label><input class="input" name="phone" required pattern="[0-9]{6,14}" placeholder="10-digit mobile" /></div>
-        <div id="villageWrap" class="hidden"><label class="label">Village / Town</label><input class="input" name="village" placeholder="e.g. Anand, GJ" /></div>
-        <button class="btn block lg" type="submit">Create account ${icon('arrow')}</button>
-      </form>
+      <a class="login-brand" href="#/" aria-label="AgriGrow home">AgriGrow<span class="field-brand-leaf">✦</span></a>
+      <a class="login-back" href="#/" aria-label="Back to homepage">${icon('arrowLeft')}<span>Back to home</span></a>
+      <section class="login-promo">
+        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=85" alt="Rows of crops growing on a local farm" />
+        <div class="login-promo-copy"><span>FROM FARM TO YOUR DOOR</span><h1>Good food starts<br/>with a <em>closer connection.</em></h1><p>Meet local farmers, shop their fresh harvests, and follow your food’s journey home.</p></div>
+      </section>
+      <section class="login-panel">
+        <div class="login-panel-heading"><span class="section-eyebrow">WELCOME TO AGRIGROW</span><h2>Your farm-fresh<br/>journey starts here.</h2><p>Create an account or sign in to continue.</p></div>
+        <form id="loginForm" class="email-login-form">
+          <div><label class="label" for="loginEmail">Email address</label><input class="input" id="loginEmail" name="email" type="email" autocomplete="email" required placeholder="you@example.com" /></div>
+          <div><label class="label" for="loginPassword">Password</label><input class="input" id="loginPassword" name="password" type="password" autocomplete="current-password" required placeholder="Enter your password" /></div>
+          <fieldset class="role-field"><legend class="label">I’m signing in as</legend><div class="role-options">
+            <label class="role-option"><input type="radio" name="role" value="farmer" required /><span class="role-option-card"><span class="role-choice-icon">${I.tractor}</span><span>Farmer</span></span></label>
+            <label class="role-option"><input type="radio" name="role" value="consumer" checked /><span class="role-option-card"><span class="role-choice-icon">${I.cart}</span><span>Consumer</span></span></label>
+          </div></fieldset>
+          <button class="btn block lg" type="submit">Continue ${icon('arrow')}</button>
+        </form>
+      </section>
     </div>
   `, null);
 }
 function bindLogin(){
-  let role = null;
-  const roleChoice = document.getElementById('roleChoice');
   const form = document.getElementById('loginForm');
-  const badge = document.getElementById('roleBadge');
-  const villageWrap = document.getElementById('villageWrap');
-  document.getElementById('backRole').onclick = ()=>{
-    role = null;
-    form.classList.add('hidden');
-    roleChoice.classList.remove('hidden');
-    document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
-  };
-  document.querySelectorAll('.role-card').forEach(card=>{
-    card.onclick = ()=>{
-      role = card.dataset.role;
-      document.querySelectorAll('.role-card').forEach(c=>c.classList.toggle('selected', c===card));
-      villageWrap.classList.toggle('hidden', role!=='farmer');
-      badge.innerHTML = (role==='farmer'? I.tractor + '<span>Signing up as Farmer</span>' : I.cart + '<span>Signing up as Consumer</span>');
-      roleChoice.classList.add('hidden');
-      form.classList.remove('hidden');
-      form.querySelector('input[name="name"]').focus();
-    };
-  });
   form.onsubmit = e =>{
     e.preventDefault();
-    if(!role){ alert('Please choose Farmer or Consumer'); return; }
     const fd = new FormData(e.target);
-    const u = Store.loginOrSignup(fd.get('name').trim(), fd.get('phone').trim(), role, fd.get('village')?.trim());
+    const u = Store.loginOrSignupEmail(fd.get('email').trim(), fd.get('role'));
     go(u.role === 'farmer' ? '#/farmer' : '#/consumer');
   };
 }
@@ -186,21 +137,30 @@ function bindLogin(){
 function viewConsumer(){
   const u = Store.getUser();
   return withShell(`
-    <div class="page-head">
-      <div>
-        <div class="h1 serif">Hi ${esc(u.name.split(' ')[0])}</div>
-        <p class="muted" style="margin-top:6px">Fresh from the farm, delivered to you.</p>
+    <div class="consumer-page">
+      <section class="consumer-welcome">
+        <div class="consumer-welcome-copy">
+          <span class="consumer-kicker">GOOD FOOD, GROWN CLOSE</span>
+          <h1>Fresh from the farm,<br/><em>ready for your table.</em></h1>
+          <p>Shop harvests from local farmers, see where your food comes from, and order at a fair price.</p>
+          <div class="consumer-welcome-actions"><button class="btn" type="button" onclick="document.getElementById('consumer-market').scrollIntoView({behavior:'smooth'})">Explore today’s harvest ${icon('arrow')}</button><a class="btn outline" href="#/trace">Trace an order ${icon('scan')}</a></div>
+          <div class="consumer-trust"><span>${I.leaf} Farm-direct produce</span><span>${I.shield} Order traceability</span><span>${I.qr} QR payments</span></div>
+        </div>
+        <div class="consumer-welcome-image"><img src="https://images.unsplash.com/photo-1657288089316-c0350003ca49?auto=format&fit=crop&w=1200&q=85" alt="A basket filled with fresh vegetables" /><span>Fresh harvests from nearby farms</span></div>
+      </section>
+      <div class="page-head consumer-market-head" id="consumer-market">
+        <div><span class="consumer-kicker">IN SEASON NOW</span><h2 class="h1 serif">Explore today’s harvest</h2><p class="muted" style="margin-top:6px">Choose your produce and get to know the farmer who grew it.</p></div>
+        <div class="search">${I.search}<input id="q" placeholder="Search produce or farmer…" /></div>
       </div>
-      <div class="search">${I.search}<input id="q" placeholder="Search tomato, mango, rice…" /></div>
+      <div class="tags consumer-filters" style="margin-bottom:20px" id="filters">
+        <span class="t active" data-f="all">All</span>
+        <span class="t" data-f="organic">${I.leaf}Organic</span>
+        <span class="t" data-f="veg">Vegetables</span>
+        <span class="t" data-f="fruit">Fruits</span>
+        <span class="t" data-f="grain">Grains</span>
+      </div>
+      <div id="grid" class="grid-listings consumer-grid"></div>
     </div>
-    <div class="tags" style="margin-bottom:18px" id="filters">
-      <span class="t active" data-f="all">All</span>
-      <span class="t" data-f="organic">${I.leaf}Organic</span>
-      <span class="t" data-f="veg">Vegetables</span>
-      <span class="t" data-f="fruit">Fruits</span>
-      <span class="t" data-f="grain">Grains</span>
-    </div>
-    <div id="grid" class="grid-listings"></div>
   `, 'home');
 }
 function bindConsumer(){
@@ -213,6 +173,16 @@ function bindConsumer(){
     if(/(mango|apple|banana|orange|grape|fruit|berry)/.test(v)) return 'fruit';
     return 'veg';
   }
+  function productPhoto(p){
+    const v = p.toLowerCase();
+    if(v.includes('carrot')) return 'https://images.unsplash.com/photo-1741515043161-e97d05e5cfcc?auto=format&fit=crop&w=700&q=80';
+    if(/(spinach|leaf|greens)/.test(v)) return 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=700&q=80';
+    if(/(tomato|chili|pepper)/.test(v)) return 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=700&q=80';
+    if(/(onion|radish|beet)/.test(v)) return 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=700&q=80';
+    if(/(mango|apple|fruit)/.test(v)) return 'https://images.unsplash.com/photo-1757281096599-b9165ba74008?auto=format&fit=crop&w=700&q=80';
+    if(/(rice|wheat|grain|millet|pulse|dal)/.test(v)) return 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=700&q=80';
+    return 'https://images.unsplash.com/photo-1657288089316-c0350003ca49?auto=format&fit=crop&w=700&q=80';
+  }
   function paint(){
     const term = q.value.trim().toLowerCase();
     const items = Store.getListings().filter(l=>{
@@ -224,12 +194,12 @@ function bindConsumer(){
     if(!items.length){ grid.innerHTML = `<div class="empty" style="grid-column:1/-1">${I.search}<div>No produce matched your search.</div></div>`; return; }
     grid.innerHTML = items.map(l => `
       <a class="listing-card" href="#/listing?id=${l.id}">
-        <div class="img">${l.image ? `<img src="${l.image}" alt="${esc(l.product)}" />` : esc(l.emoji)}</div>
+        <div class="img"><img src="${l.image || productPhoto(l.product)}" alt="Fresh ${esc(l.product)} from ${esc(l.farmerName)}" />${l.organic?`<span class="consumer-organic">${I.leaf} Organic</span>`:''}</div>
         <div class="body">
           <div style="display:flex;align-items:center;gap:6px"><div style="font-weight:700">${esc(l.product)}</div>${l.organic?`<span class="chip">${I.leaf}</span>`:''}</div>
           <div class="muted" style="font-size:11px;margin-top:2px">${esc(l.farmerName)} · ${esc(l.village)}</div>
           <div style="margin-top:8px"><span class="price">₹${l.pricePerKg}/kg</span><span class="strike">₹${l.marketPricePerKg}</span></div>
-          <div class="muted" style="font-size:10px;margin-top:2px">${l.stockKg} kg available</div>
+          <div class="muted" style="font-size:10px;margin-top:5px">${l.stockKg} kg available</div>
         </div>
       </a>
     `).join('');

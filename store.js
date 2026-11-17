@@ -23,6 +23,18 @@ const Store = {
     if(!u){ u = { id:`${role[0]}-${Date.now()}`, name, phone, role, village }; users.push(u); write(K.users, users); }
     Store.setUser(u); return u;
   },
+  loginOrSignupEmail(email, role){
+    const users = read(K.users, []);
+    const normalizedEmail = email.trim().toLowerCase();
+    let u = users.find(x => x.email?.toLowerCase() === normalizedEmail && x.role === role);
+    if(!u){
+      const name = normalizedEmail.split('@')[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      u = { id:`${role[0]}-${Date.now()}`, name, email:normalizedEmail, phone:'', role, village:'' };
+      users.push(u);
+      write(K.users, users);
+    }
+    Store.setUser(u); return u;
+  },
   getListings(){
     const cur = read(K.listings, null);
     if(cur && cur.length) return cur;
