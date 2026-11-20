@@ -1,14 +1,8 @@
 // localStorage-backed store (mock backend) — .
 const K = { user:'agrigrow.user', users:'agrigrow.users', listings:'agrigrow.listings', orders:'agrigrow.orders' };
 
-const seedListings = [
-  { id:'l1', farmerId:'f-demo', farmerName:'Ramesh Patel', village:'Anand, GJ', product:'Tomato', emoji:'🍅', pricePerKg:28, marketPricePerKg:42, stockKg:120, harvestedOn:'2026-05-09', organic:true },
-  { id:'l2', farmerId:'f-demo', farmerName:'Ramesh Patel', village:'Anand, GJ', product:'Spinach', emoji:'🥬', pricePerKg:35, marketPricePerKg:50, stockKg:40, harvestedOn:'2026-05-10', organic:true },
-  { id:'l3', farmerId:'f-2', farmerName:'Lakshmi Devi', village:'Mysuru, KA', product:'Carrot', emoji:'🥕', pricePerKg:32, marketPricePerKg:45, stockKg:80, harvestedOn:'2026-05-08', organic:false },
-  { id:'l4', farmerId:'f-3', farmerName:'Arjun Singh', village:'Nashik, MH', product:'Mango (Alphonso)', emoji:'🥭', pricePerKg:220, marketPricePerKg:320, stockKg:60, harvestedOn:'2026-05-07', organic:true },
-  { id:'l5', farmerId:'f-2', farmerName:'Lakshmi Devi', village:'Mysuru, KA', product:'Green Chili', emoji:'🌶️', pricePerKg:60, marketPricePerKg:90, stockKg:25, harvestedOn:'2026-05-10', organic:true },
-  { id:'l6', farmerId:'f-4', farmerName:'Sita Kumari', village:'Patna, BR', product:'Basmati Rice', emoji:'🌾', pricePerKg:75, marketPricePerKg:110, stockKg:500, harvestedOn:'2026-04-20', organic:false }
-];
+const SAMPLE_LISTING_IDS = new Set(['l1', 'l2', 'l3', 'l4', 'l5', 'l6']);
+const SAMPLE_FARMER_IDS = new Set(['f-demo', 'f-2', 'f-3', 'f-4']);
 
 function read(k, fb){ try{ const v = localStorage.getItem(k); return v?JSON.parse(v):fb; }catch{return fb;} }
 function write(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
@@ -36,14 +30,23 @@ const Store = {
     Store.setUser(u); return u;
   },
   getListings(){
-    const cur = read(K.listings, null);
-    if(cur && cur.length) return cur;
-    write(K.listings, seedListings); return seedListings;
+    const listings = read(K.listings, []);
+    const realListings = listings.filter(l => !SAMPLE_LISTING_IDS.has(l.id) && !SAMPLE_FARMER_IDS.has(l.farmerId));
+    if(realListings.length !== listings.length) write(K.listings, realListings);
+    const orders = read(K.orders, []);
+    const realOrders = orders.filter(o => !SAMPLE_LISTING_IDS.has(o.listingId));
+    if(realOrders.length !== orders.length) write(K.orders, realOrders);
+    return realListings;
   },
   saveListings(l){ write(K.listings, l); },
   addListing(l){ const all = Store.getListings(); const next = { ...l, id:`l-${Date.now()}` }; Store.saveListings([next, ...all]); return next; },
   removeListing(id){ Store.saveListings(Store.getListings().filter(l => l.id !== id)); },
-  getOrders(){ return read(K.orders, []); },
+  getOrders(){
+    const orders = read(K.orders, []);
+    const realOrders = orders.filter(o => !SAMPLE_LISTING_IDS.has(o.listingId));
+    if(realOrders.length !== orders.length) write(K.orders, realOrders);
+    return realOrders;
+  },
   saveOrders(o){ write(K.orders, o); },
   placeOrder(consumer, listing, qtyKg){
     const orders = Store.getOrders();

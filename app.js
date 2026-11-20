@@ -94,7 +94,6 @@ function viewLanding(){
             <div class="field-produce-ground" aria-hidden="true"></div>
             <img class="field-produce" src="https://adst.mp.pl/img/articles/zdrowe_diety/healthy-food-1323802-1279x828.jpg" alt="Fresh red tomatoes, yellow bell pepper, and parsley" />
           </div>
-          <div class="field-wave" aria-hidden="true"><svg viewBox="0 0 920 80" preserveAspectRatio="none"><path d="M0 13 Q25 0 50 13T100 13T150 13T200 13T250 13T300 13T350 13T400 13T450 13T500 13T550 13T600 13T650 13T700 13T750 13T800 13T850 13T900 13T950 13"/><path d="M0 24 Q25 11 50 24T100 24T150 24T200 24T250 24T300 24T350 24T400 24T450 24T500 24T550 24T600 24T650 24T700 24T750 24T800 24T850 24T900 24T950 24"/><path d="M0 35 Q25 22 50 35T100 35T150 35T200 35T250 35T300 35T350 35T400 35T450 35T500 35T550 35T600 35T650 35T700 35T750 35T800 35T850 35T900 35T950 35"/><path d="M0 46 Q25 33 50 46T100 46T150 46T200 46T250 46T300 46T350 46T400 46T450 46T500 46T550 46T600 46T650 46T700 46T750 46T800 46T850 46T900 46T950 46"/><path d="M0 57 Q25 44 50 57T100 57T150 57T200 57T250 57T300 57T350 57T400 57T450 57T500 57T550 57T600 57T650 57T700 57T750 57T800 57T850 57T900 57T950 57"/><path d="M0 68 Q25 55 50 68T100 68T150 68T200 68T250 68T300 68T350 68T400 68T450 68T500 68T550 68T600 68T650 68T700 68T750 68T800 68T850 68T900 68T950 68"/></svg></div>
         </section>
       </section>
     </main>`;
@@ -185,13 +184,14 @@ function bindConsumer(){
   }
   function paint(){
     const term = q.value.trim().toLowerCase();
-    const items = Store.getListings().filter(l=>{
+    const listings = Store.getListings();
+    const items = listings.filter(l=>{
       if(term && !l.product.toLowerCase().includes(term) && !l.farmerName.toLowerCase().includes(term)) return false;
       if(filter==='organic' && !l.organic) return false;
       if(['veg','fruit','grain'].includes(filter) && classify(l.product)!==filter) return false;
       return true;
     });
-    if(!items.length){ grid.innerHTML = `<div class="empty" style="grid-column:1/-1">${I.search}<div>No produce matched your search.</div></div>`; return; }
+    if(!items.length){ const message=listings.length?'No produce matched your search.':'No farmer listings yet. Listings added by farmers will appear here.'; grid.innerHTML = `<div class="empty" style="grid-column:1/-1">${I.search}<div>${message}</div></div>`; return; }
     grid.innerHTML = items.map(l => `
       <a class="listing-card" href="#/listing?id=${l.id}">
         <div class="img"><img src="${l.image || productPhoto(l.product)}" alt="Fresh ${esc(l.product)} from ${esc(l.farmerName)}" />${l.organic?`<span class="consumer-organic">${I.leaf} Organic</span>`:''}</div>
@@ -213,7 +213,7 @@ function bindConsumer(){
 
 function viewFarmer(){
   const u = Store.getUser();
-  const mine = Store.getListings().filter(l => l.farmerId === u.id || l.farmerId === 'f-demo');
+  const mine = Store.getListings().filter(l => l.farmerId === u.id);
   const orderCount = Store.getOrders().filter(o => mine.some(l=>l.id===o.listingId)).length;
   return withShell(`
     <div class="page-head">
@@ -408,7 +408,7 @@ function viewOrders(){
   const all = Store.getOrders();
   let orders;
   if(u.role === 'farmer'){
-    const myIds = new Set(Store.getListings().filter(l => l.farmerId === u.id || l.farmerId === 'f-demo').map(l => l.id));
+    const myIds = new Set(Store.getListings().filter(l => l.farmerId === u.id).map(l => l.id));
     orders = all.filter(o => myIds.has(o.listingId));
   } else {
     orders = all.filter(o => o.consumerId === u.id);
